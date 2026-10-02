@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CivicQuest — Learn. Practice. Contribute.</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7fb;color:#182033}
+header{background:linear-gradient(135deg,#253b80,#4d67d8);color:white;padding:24px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:1.6rem;font-weight:800}.tag{opacity:.9;font-size:.9rem}
+main{max-width:1100px;margin:28px auto;padding:0 18px}
+.hero{background:white;border-radius:22px;padding:32px;box-shadow:0 8px 30px #17203312}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);margin:0 0 10px}.hero p{max-width:700px;color:#5e6678;font-size:1.05rem}
+button{border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;background:#4d67d8;color:white}
+button.secondary{background:#eef1ff;color:#30459a}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+.stat{background:white;border-radius:16px;padding:18px}.stat b{display:block;font-size:1.6rem}.muted{color:#697386}
+section{margin-top:28px} h2{margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.card{background:white;padding:20px;border-radius:17px;border:1px solid #e7eaf2;cursor:pointer;transition:.15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #17203312}
+.icon{font-size:2rem}.card h3{margin:8px 0}.locked{opacity:.55;cursor:not-allowed}
+.challenge{background:#fff;border-radius:18px;padding:24px;border-left:6px solid #4d67d8}
+.option{display:block;width:100%;text-align:left;background:#f1f3f9;color:#182033;margin:9px 0}
+.option:hover{background:#e4e8f7}
+#feedback{font-weight:700;margin-top:12px;min-height:24px}
+.badges{display:flex;gap:10px;flex-wrap:wrap}.badge{background:#fff;padding:12px 15px;border-radius:14px;border:1px solid #e5e7ee}
+.progress{height:12px;background:#e7eaf1;border-radius:20px;overflow:hidden}.bar{height:100%;width:0;background:#4d67d8;transition:.3s}
+footer{text-align:center;color:#747d8f;padding:35px}
+@media(max-width:600px){.stats{grid-template-columns:1fr}.hero{padding:24px}header{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="logo">🌍 CivicQuest</div><div class="tag">Learn. Practice. Contribute.</div></div>
+  <div>Level <span id="level">1</span> • ⭐ <span id="points">0</span></div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Become a better citizen, one habit at a time.</h1>
+    <p>CivicQuest teaches children manners, responsibility and civic sense through situations, challenges and real-world missions.</p>
+    <button onclick="document.getElementById('levels').scrollIntoView({behavior:'smooth'})">Start my journey →</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="muted">Points</span><b id="points2">0</b></div>
+    <div class="stat"><span class="muted">Challenges completed</span><b id="done">0</b></div>
+    <div class="stat"><span class="muted">Current streak</span><b>🔥 <span id="streak">1</span></b></div>
+  </div>
+
+  <section id="levels">
+    <h2>🧭 Your learning journey</h2>
+    <div class="grid">
+      <div class="card" onclick="showLevel(1)"><div class="icon">🤝</div><h3>1. Respect</h3><p class="muted">Manners, listening and empathy.</p></div>
+      <div class="card" onclick="showLevel(2)"><div class="icon">🧹</div><h3>2. Responsibility</h3><p class="muted">Rules, cleanliness and accountability.</p></div>
+      <div class="card locked"><div class="icon">🏙️</div><h3>3. Civic Sense</h3><p class="muted">Public spaces and community life.</p></div>
+      <div class="card locked"><div class="icon">🏘️</div><h3>4. Community</h3><p class="muted">Solve problems together.</p></div>
+      <div class="card locked"><div class="icon">🗳️</div><h3>5. Citizenship</h3><p class="muted">Democracy, rights and responsibilities.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>🎯 Today's civic challenge</h2>
+    <div class="challenge">
+      <h3 id="question">You see someone drop a wrapper in a public place. What is the most responsible response?</h3>
+      <div id="options"></div>
+      <div id="feedback"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>🌱 Real-world missions</h2>
+    <div class="grid">
+      <div class="card"><div class="icon">🗑️</div><h3>Clean Space</h3><p>Keep your surroundings clean and learn why public cleanliness matters.</p><button onclick="mission(this)">Complete</button></div>
+      <div class="card"><div class="icon">⏳</div><h3>Respect the Queue</h3><p>Practice waiting your turn today.</p><button onclick="mission(this)">Complete</button></div>
+      <div class="card"><div class="icon">🏛️</div><h3>Protect Public Property</h3><p>Identify one public thing that everyone should help protect.</p><button onclick="mission(this)">Complete</button></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>🏆 My progress</h2>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <p class="muted"><span id="progressText">0</span>% journey completed</p>
+    <div class="badges">
+      <div class="badge">🌱 First Step</div>
+      <div class="badge">🤝 Respect Builder</div>
+      <div class="badge">🏙️ Community Explorer</div>
+    </div>
+  </section>
+</main>
+<footer>CivicQuest • Built to encourage thoughtful, responsible citizenship.</footer>
+
+<script>
+let points=Number(localStorage.getItem("cqPoints")||0);
+let done=Number(localStorage.getItem("cqDone")||0);
+
+function update(){
+  document.getElementById("points").textContent=points;
+  document.getElementById("points2").textContent=points;
+  document.getElementById("done").textContent=done;
+  document.getElementById("level").textContent=Math.min(5,1+Math.floor(points/100));
+  let pct=Math.min(100,Math.round(points/5));
+  document.getElementById("bar").style.width=pct+"%";
+  document.getElementById("progressText").textContent=pct;
+  localStorage.setItem("cqPoints",points); localStorage.setItem("cqDone",done);
+}
+const choices=[
+["Ignore it.","That leaves the problem unresolved.",false],
+["Politely remind them, or dispose of it appropriately if safe.","Good civic behaviour considers both responsibility and respect.",true],
+["Shout at them.","Respectful communication is important even when correcting behaviour.",false]
+];
+function loadQuestion(){
+ const box=document.getElementById("options");
+ box.innerHTML="";
+ choices.forEach((c,i)=>{
+   let b=document.createElement("button"); b.className="option"; b.textContent=c[0];
+   b.onclick=()=>answer(c[2],c[1]);
+   box.appendChild(b);
+ });
+}
+function answer(correct,msg){
+ document.getElementById("feedback").textContent=(correct?"✅ "+msg+" +20 points":"💡 "+msg);
+ if(correct){points+=20;done++;update();document.querySelectorAll(".option").forEach(x=>x.disabled=true);}
+}
+function mission(btn){
+ if(btn.disabled)return;
+ btn.disabled=true;btn.textContent="✓ Completed";
+ points+=10;done++;update();
+}
+function showLevel(n){
+ alert("Level "+n+" is part of the CivicQuest journey. This prototype starts with Level 1; more lessons can be added here.");
+}
+loadQuestion();update();
+</script>
+</body>
+</html>
